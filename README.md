@@ -13,28 +13,44 @@ ${CODEX_HOME:-$HOME/.codex}
 
 ```bash
 chmod +x codex-delete-session.sh
+chmod +x codex-list-sessions.sh
+```
+
+## Recommended Flow
+
+```bash
+./codex-list-sessions.sh --filter "/path/or/text"
+./codex-delete-session.sh SESSION_ID
+./codex-delete-session.sh SESSION_ID --apply --force-no-vacuum
+```
+
+If the final audit looks correct and nothing important remains:
+
+```bash
+./codex-delete-session.sh --delete-backups
+./codex-delete-session.sh --delete-backups --apply
+```
+
+Later, after closing Codex, compact SQLite databases:
+
+```bash
+./codex-delete-session.sh --vacuum-only
 ```
 
 ## Usage
 
-- Recommended flow:
+- List sessions:
 
   ```bash
-  ./codex-delete-session.sh SESSION_ID
-  ./codex-delete-session.sh SESSION_ID --apply --force-no-vacuum
+  ./codex-list-sessions.sh
   ```
 
-  If the final audit looks correct and nothing important remains:
+- List sessions containing text in any output field:
 
   ```bash
-  ./codex-delete-session.sh --delete-backups
-  ./codex-delete-session.sh --delete-backups --apply
-  ```
-
-  Later, after closing Codex, compact SQLite databases:
-
-  ```bash
-  ./codex-delete-session.sh --vacuum-only
+  ./codex-list-sessions.sh --filter "React"
+  ./codex-list-sessions.sh --filter "/path/to/project"
+  ./codex-list-sessions.sh --filter "2026-02-12"
   ```
 
 - Dry-run mode is the default. It prints what would be deleted and changes
