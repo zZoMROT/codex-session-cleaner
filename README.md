@@ -90,6 +90,10 @@ Later, after closing Codex, compact SQLite databases:
   Only use this when Codex is closed. `VACUUM` physically compacts SQLite
   database files and truncates WAL files after deletion.
 
+  Force modes do not bypass the Codex version safety check. If your Codex
+  version is newer than the script's tested version, you must confirm manually
+  because Codex storage files or database schema may have changed.
+
 - Run only SQLite `VACUUM` later, after closing Codex:
 
   ```bash
@@ -181,3 +185,5 @@ goals_1.sqlite.bak.*
 - `SESSION_ID` must be UUID-like, for example:
   `019c51a6-bdaf-7c53-9007-f9d6fa30cf4a`
 - Use `--force-no-vacuum` if you are deleting while Codex may still be running.
+- `--force` and `--force-no-vacuum` do not bypass the Codex version safety
+  check. Newer Codex versions may change local storage files or SQLite schema.

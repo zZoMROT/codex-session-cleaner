@@ -38,6 +38,7 @@ Options:
   --force          Answer yes to confirmations. Use with --apply to delete.
   --force-no-vacuum
                    Answer yes to confirmations, but skip SQLite VACUUM.
+                   Force flags do not bypass untested Codex version checks.
   --vacuum-only    Only run SQLite VACUUM. Codex must be closed.
   --delete-backups
                    Delete backup files created by this script.
@@ -81,14 +82,9 @@ path_info() {
 }
 
 # Ask a yes/no question. Empty input means default "no".
-ask_yes() {
+ask_yes_manual() {
   local prompt="$1"
   local answer
-
-  if [ "${FORCE:-0}" -eq 1 ]; then
-    warn "FORCE: yes - $prompt"
-    return 0
-  fi
 
   printf '%s [y/N]: ' "$prompt"
   IFS= read -r answer
@@ -97,6 +93,17 @@ ask_yes() {
     y|Y|yes|YES) return 0 ;;
     *) return 1 ;;
   esac
+}
+
+ask_yes() {
+  local prompt="$1"
+
+  if [ "${FORCE:-0}" -eq 1 ]; then
+    warn "FORCE: yes - $prompt"
+    return 0
+  fi
+
+  ask_yes_manual "$prompt"
 }
 
 # Ask for confirmation only in --apply mode.
@@ -302,7 +309,7 @@ check_codex_version() {
     warn "this script may not work as expected; continuing is risky."
     check_repository_manifest "$current_version" "$manifest" "$max_tested"
 
-    if ! ask_yes "Continue anyway?"; then
+    if ! ask_yes_manual "Continue anyway?"; then
       warn "cancelled"
       exit 0
     fi
