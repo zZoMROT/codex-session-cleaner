@@ -1,0 +1,6 @@
+{
+  "script_version": "0.1.0",
+  "max_tested_codex_version": "0.139.0",
+  "repository_manifest_url": "https://raw.githubusercontent.com/zZoMROT/codex-session-cleaner/main/codex-delete-session.manifest.json",
+  "repository_script_url": "https://raw.githubusercontent.com/zZoMROT/codex-session-cleaner/main/codex-delete-session.sh"
+}
